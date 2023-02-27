@@ -1,0 +1,119 @@
+{% comment %} v7.0 jaxoli.com {% endcommment %}
+<style>
+  .product-form__submit[disabled=disabled]{
+    opacity: 1 !important;
+  }
+  .icon_arr{
+    height: 6px;
+    position: absolute;
+    right: 16px;
+    top: 20px;
+  }
+  summary.form__label s {
+    padding-left: 8px;
+  }
+
+    .product-form__input input[type=radio]+label span, .quick-add-modal__content-info .product-form__input input[type=radio]+label span{
+      display: flex;
+      justify-content: space-between;
+    }
+    .product-form__input input[type=radio]+label s, .quick-add-modal__content-info .product-form__input input[type=radio]+label s{
+      flex: 0 0 50%;
+    }
+
+</style>
+{%- when 'variant_picker' -%}
+              {%- unless product.has_only_default_variant -%}
+                {%- if block.settings.picker_type == 'button' -%}
+                  <variant-radios
+                    class="no-js-hidden"
+                    data-section="{{ section.id }}"
+                    data-url="{{ product.url }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {%- for option in product.options_with_values -%}
+                      <fieldset class="js product-form__input">
+                        <legend class="form__label">{{ option.name }}</legend>
+                      
+                      <details class="dropdown">
+                      <summary class="form__label">
+                      {{ product.selected_or_first_available_variant.title }} <span style="color:red;">{{ product.selected_or_first_available_variant.price | money }} <s style="color:black;">{{ product.selected_or_first_available_variant.compare_at_price | money }}</s> </span> {% render 'icon-caret' %}
+                      </summary>
+                        {%- for variant in product.variants -%}
+                          <input
+                            type="radio"
+                            id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                            name="{{ option.name }}"
+                            value="{{ variant.title }}"
+                            form="{{ product_form_id }}"
+                            {% if product.selected_or_first_available_variant == variant %}
+                              checked
+                            {% endif %}
+                          >
+                          <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+                            {{ variant.title }} <span style="color:red;"> {{ variant.price | money }} <s style="color:black;">{{ variant.compare_at_price | money }}</s> </span>
+                          </label>
+                        {%- endfor -%}
+                      </details>
+                      </fieldset>
+                    {%- endfor -%}
+                    <script type="application/json">
+                      {{ product.variants | json }}
+                    </script>
+                  </variant-radios>
+                {%- else -%}
+                  
+                {%- endif -%}
+              {%- endunless -%}
+
+              <noscript class="product-form__noscript-wrapper-{{ section.id }}">
+                <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+                  <label class="form__label" for="Variants-{{ section.id }}">
+                    {{- 'products.product.product_variants' | t -}}
+                  </label>
+                  <div class="select">
+                    <select
+                      name="id"
+                      id="Variants-{{ section.id }}"
+                      class="select__select"
+                      form="{{ product_form_id }}"
+                    >
+                      {%- for variant in product.variants -%}
+                        <option
+                          {% if variant == product.selected_or_first_available_variant %}
+                            selected="selected"
+                          {% endif %}
+                          {% if variant.available == false %}
+                            disabled
+                          {% endif %}
+                          value="{{ variant.id }}"
+                        >
+                          {{ variant.title }}
+                          {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                          - {{ variant.price | money | strip_html }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                    {% render 'icon-caret' %}
+                  </div>
+                </div>
+              </noscript>
+            <script>
+              $(document).ready(function(){
+                $(".product-form__input input[type='radio'] + label").click(function(){
+                var cng = $(this).html();
+                  $("summary.form__label").html(cng);
+                });
+              });
+              </script>
+              <script>
+              $(document).ready(function(){
+                $(".product-form__input input[type='radio'] + label").click(function(){
+                  $("details.dropdown").removeAttr("open");
+                });
+                $(".product-form__input input[type='radio']").change(function(){
+                  $("summary.form__label").append("<svg class='icon_arr' aria-hidden='true' focusable='false' role='presentation' class='icon icon-caret' viewBox='0 0 10 6'><path fill-rule='evenodd' clip-rule='evenodd' d='M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z' fill='currentColor'></svg>");
+              
+                });
+              });
+              </script>
