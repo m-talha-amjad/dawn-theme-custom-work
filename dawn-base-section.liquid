@@ -2,7 +2,25 @@
  https://celestetesting.myshopify.com/
 Dawn 11.0
 {% endcomment %}
+{% comment %}
 
+  replace base-section in html and styles with your section name eg vertical-tabs
+
+  Add All styles <style></style> in your named stylesheet
+
+  replace base_section in schema with your section name eg vertical_tabs
+
+  in blocks and presets replace column with your desired block name eg tab
+
+  In en.default.schema.json at end translations are added so you can copy and rename to your section name.
+
+  Replace disabled_on with 
+  
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },  
+{% endcomment %}
+{{ 'section-base-section.css' | asset_url | stylesheet_tag }}
 <style> 
    .base-section .title {
   margin: 0;
@@ -21,15 +39,12 @@ Dawn 11.0
     margin-bottom: 3rem;
   }
 
-  .base-section .page-width {
+  /* .base-section .page-width {
     padding-left: 0;
     padding-right: 0;
-  }
+  } */
 }
 </style>
-
-{{ 'section-base-section.css' | asset_url | stylesheet_tag }}
-
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -68,7 +83,8 @@ Dawn 11.0
   "class": "section",
   "tag": "section",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": ["*"],
+    "templates": ["*"]
   },
   "settings": [
     {
@@ -181,41 +197,3 @@ Dawn 11.0
   ]
 }
 {% endschema %}
-
-
-{% comment %}
- en.default.schema.json
-{% endcomment %}
-"base_section": {
-      "name": "Base Section",
-      "settings": {
-        "title": {
-          "label": "Heading"
-        }
-      },
-      "blocks": {
-        "column": {
-          "name": "Column",
-          "settings": {
-            "image": {
-              "label": "Image"
-            },
-            "title": {
-              "label": "Heading"
-            },
-            "text": {
-              "label": "Description"
-            },
-            "link_label": {
-              "label": "Link label"
-            },
-            "link": {
-              "label": "Link"
-            }
-          }
-        }
-      },
-      "presets": {
-        "name": "Base Section"
-      }
-    }
