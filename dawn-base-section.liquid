@@ -12,7 +12,41 @@ Dawn 11.0
 
   in blocks and presets replace column with your desired block name eg tab
 
-  In en.default.schema.json at end translations are added so you can copy and rename to your section name.
+  In en.default.schema.json add in sections object at end you can copy and rename to your section name.
+    ,
+    "base_section": {
+      "name": "Base Section",
+      "settings": {
+        "title": {
+          "label": "Heading"
+        }
+      },
+      "blocks": {
+        "column": {
+          "name": "Column",
+          "settings": {
+            "image": {
+              "label": "Image"
+            },
+            "title": {
+              "label": "Heading"
+            },
+            "text": {
+              "label": "Description"
+            },
+            "link_label": {
+              "label": "Link label"
+            },
+            "link": {
+              "label": "Link"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Base Section"
+      }
+    }
 
   Replace disabled_on with 
   
